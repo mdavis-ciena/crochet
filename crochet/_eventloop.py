@@ -125,7 +125,26 @@ class ResultRegistry(object):
             result._set_result(Failure(ReactorStopped()))
 
 
-class EventualResult(object):
+if sys.version_info >= (3, 5):
+    from typing import Generic, TypeVar
+
+    _T_co = TypeVar("_T_co", covariant=True)
+else:
+    # For the stub type hints to work, EventualResult MUST have Generic[...]
+    # as a bas class.  So hack this to still do the right subclassing in
+    # Python 2.7 with the same syntax.
+
+    _T_co = None
+
+    class GenericMeta(type):
+        def __getitem__(self, key):
+            return self
+
+    class Generic(object):
+        __metaclass__ = GenericMeta
+
+
+class EventualResult(Generic[_T_co]):
     """
     A blocking interface to Deferred results.
 

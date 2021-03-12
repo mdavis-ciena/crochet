@@ -59,3 +59,21 @@ Crochet will do the following on your behalf in order to enable these APIs:
   framework. Unlike Twisted's built-in ``logging`` bridge, this includes
   support for blocking `Handler` instances.
 
+Static Type Checking
+--------------------
+
+Crochet comes with type hints for Python 3.5+.  However, due to current
+limitations in ``Callable`` generic construction (see
+`PEP 612 — Parameter Specification Variables`_), the arguments of a call to
+a ``@run_in_reactor``-decorated function or method cannot be checked without
+giving type checkers some special help.  Crochet ships with a plugin which
+fills this role when the ``mypy`` static type checker is used.  It resides in
+the ``crochet.mypy`` package and must be configured as described in
+`Configuring mypy to use plugins`_.  For example, in a ``mypy.ini``
+configuration file::
+
+    [mypy]
+    plugins = crochet.mypy
+
+.. _PEP 612 — Parameter Specification Variables: https://www.python.org/dev/peps/pep-0612/
+.. _Configuring mypy to use plugins: https://mypy.readthedocs.io/en/latest/extending_mypy.html#configuring-mypy-to-use-plugins
